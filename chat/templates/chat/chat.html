@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+CHAT
+{% endblock title %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static "chat/styles.css" %}"/>
+{% endblock css_files %}
+
+{% block content %}
+<div class="chat-box">
+<h1>Welcome to the CHAT ROOM</h1>
+<div id="chat-msgs">
+    {% for message in messages %}
+    <p>{{message.user.username}} : {{message.content}}<p>
+    {% endfor %}
+</div>
+<div class="text-box">
+<form action="{% url "send_msg" %}" method ="POST">
+    {% csrf_token %}
+    <input type="text" name="content" placeholder="Type your message...">
+    <button type = "submit">Send</button>
+</form>
+</div>
+</div>
+{% endblock content %}
+
