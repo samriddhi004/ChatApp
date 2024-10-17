@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "chat",
     "users",
     "accounts",
@@ -71,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "chatapp.wsgi.application"
+
+ASGI_APPLICATION = "chatapp.asgi.application"
 
 
 # Database
