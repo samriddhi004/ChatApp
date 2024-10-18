@@ -18,3 +18,8 @@ class SendMessageView(LoginRequiredMixin,View):
         content = request.POST.get("content")
         Message.objects.create(user=request.user,content=content)
         return redirect('chat')
+    
+def room(request,room_name):
+    return render(request,"chat/room.html",{
+        "room_name":room_name
+    })
