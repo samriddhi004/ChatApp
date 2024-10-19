@@ -11,6 +11,7 @@ class Message(models.Model):
     def __str__(self):
         return f"{self.sender} : {self.content}"
     
+
 class ChatRoom(models.Model):
     name = models.CharField(max_length=20)
     members = models.ManyToManyField(User,related_name="chats")
