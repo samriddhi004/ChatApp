@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Message
+from .models import Message,ChatRoom
 from django.views import View
 
 from .models import ChatRoom, Message
@@ -9,11 +9,10 @@ from .models import ChatRoom, Message
 class ChatView(LoginRequiredMixin, TemplateView):
     template_name="chat/chat.html"
     login_url="/accounts/login/"
-
-    # def get_context_data(self, **kwargs):
-    #     context =  super().get_context_data(**kwargs)
-    #     context["messages"] = Message.objects.all().order_by('timestamp')
-    #     return context
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context["rooms"] = ChatRoom.objects.all()
+        return context
     
 #to save it to db
 class SendMessageView(LoginRequiredMixin,View):
@@ -24,7 +23,7 @@ class SendMessageView(LoginRequiredMixin,View):
     
 
 class OpenChat(LoginRequiredMixin,View):
-    def get(self, request,room_name):
+    def get(self,request,room_name):
 
         messages = []
         #group validation and updating
@@ -43,13 +42,10 @@ class OpenChat(LoginRequiredMixin,View):
                                  'username':msg.sender.username,
                                  'timestamp':msg.timestamp.strftime('%H:%M:%S')})
             
-            
         else:
             newchat = ChatRoom(name=room_name,creator=user)
             newchat.save()
             newchat.members.add(user)
-
-        
 
 
         return render(request,"chat/room.html",{
