@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Message
 from django.views import View
 
+from .models import ChatRoom, Message
 
 class ChatView(LoginRequiredMixin, TemplateView):
     template_name="chat/chat.html"
@@ -22,6 +23,21 @@ class SendMessageView(LoginRequiredMixin,View):
         return redirect('chat')
     
 
-# def room(request,room_name):
-#     print("Entered a room")
-#     return render(request, "chat/room.html")
+class OpenChat(LoginRequiredMixin,View):
+    def get(request,room_name):
+
+        #group validation and updating
+        user = request.user
+        chatfilter = ChatRoom.objects.filter(name=room_name)
+        if chatfilter.exists():
+            chat = chatfilter[0]
+            if not user in chat.members.all():
+                chat.members.add(user)
+        else:
+            newchat = ChatRoom(name=room_name,creator=user)
+            newchat.save()
+            newchat.members.add(user)
+
+        return render(request,"chat/room.html",{
+            "room_name":room_name
+        })
