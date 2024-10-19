@@ -16,6 +16,7 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 - if an new user joins existing room, he/she is added as that chat member
 - messages are saved while receiving them in consumers.py
 - passing history message of correspoding chatroom as context to room.html (message persistancy)
+- list down available chatrooms with option to join one of them in chat.html
 
 ## Following 
 
@@ -23,7 +24,6 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 
 ## To Do 📝
 
-- List down available chatrooms with option to join one of them in chat.html
 - Implement leaving a room feature
 - Implement DM feature to available users by searching
 - 
