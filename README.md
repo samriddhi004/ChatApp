@@ -11,12 +11,11 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 
 ## Have Done ✅
 
-- Implemented https://channels.readthedocs.io/en/stable/installation.html
-- added gitignore
-- added danphe app in settings.py INSTALLED_APPS
-- modified asgi.py to use ProtocolTypeRouter
-- added ASGI_APPLICATION = "chatapp.asgi.application" in settings.py
--
+- created models for Message and ChatRoom
+- creating a new chat room while someone opens a new room
+- if an new user joins existing room, he/she is added as that chat member
+- messages are saved while receiving them in consumers.py
+- passing history message of correspoding chatroom as context to room.html (message persistancy)
 
 ## Following 
 
@@ -24,4 +23,7 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 
 ## To Do 📝
 
--
+- List down available chatrooms with option to join one of them in chat.html
+- Implement leaving a room feature
+- Implement DM feature to available users by searching
+- 
