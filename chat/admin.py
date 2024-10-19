@@ -8,3 +8,4 @@ from .models import Message, ChatRoom
 # admin.site.register(Message,MessageAdmin)
 
 admin.site.register(ChatRoom)
+admin.site.register(Message)

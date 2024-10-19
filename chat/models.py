@@ -6,9 +6,8 @@ class Message(models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE) #need to use other than CASCADE, as message can be there even if user is deleted
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    chatbox = models.ForeignKey('ChatRoom',on_delete=models.CASCADE,null=True)
+    chatroom = models.ForeignKey('ChatRoom',on_delete=models.CASCADE,null=True)
     
-
     def __str__(self):
         return f"{self.sender} : {self.content}"
     

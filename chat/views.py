@@ -24,8 +24,9 @@ class SendMessageView(LoginRequiredMixin,View):
     
 
 class OpenChat(LoginRequiredMixin,View):
-    def get(request,room_name):
+    def get(self, request,room_name):
 
+        messages = []
         #group validation and updating
         user = request.user
         chatfilter = ChatRoom.objects.filter(name=room_name)
@@ -33,11 +34,25 @@ class OpenChat(LoginRequiredMixin,View):
             chat = chatfilter[0]
             if not user in chat.members.all():
                 chat.members.add(user)
+
+            #getting old messages
+            messagesobj = Message.objects.filter(chatroom = chat)
+
+            for msg in messagesobj:
+                messages.append({'message':msg.content,
+                                 'username':msg.sender.username,
+                                 'timestamp':msg.timestamp.strftime('%H:%M:%S')})
+            
+            
         else:
             newchat = ChatRoom(name=room_name,creator=user)
             newchat.save()
             newchat.members.add(user)
 
+        
+
+
         return render(request,"chat/room.html",{
-            "room_name":room_name
+            "room_name":room_name,
+            "messages":messages
         })
