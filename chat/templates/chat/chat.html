@@ -33,6 +33,18 @@ CHAT
     <title>Chat Rooms</title>
 </head>
 <body>
+    <div>
+        <h1>Available Chat Rooms</h1>
+        <ul>
+            {% for room in rooms%}
+            <li> 
+                {{room.name}}
+                <a href = {% url "room" room.name %}>JOIN</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
     What chat room would you like to enter?<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
