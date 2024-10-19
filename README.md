@@ -24,6 +24,5 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 
 ## To Do 📝
 
-- Implement leaving a room feature
 - Implement DM feature to available users by searching
 - 
