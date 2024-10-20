@@ -30,7 +30,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     #for async database query operation
     @database_sync_to_async
     def get_chat_room(self):
-        return ChatRoom.objects.get(name=self.room_name)
+        room_name = self.room_name
+        user = self.scope['user']
+        room = ChatRoom.objects.get(name=self.room_name)
+        if not room.is_private or (room.is_private and user in room.members.all()):
+            return room
+        else:
+            return None
 
     @database_sync_to_async
     def save_message(self,message):
