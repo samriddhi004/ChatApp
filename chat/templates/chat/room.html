@@ -8,21 +8,6 @@
     <link rel="stylesheet" href="{% static "chat/room.css"%}">
 </head>
 <body>
-<<<<<<< HEAD
-    <h1>{{room_name}}</h1>
-    <textarea id="chat-log" cols="100" rows="20">
-    {% for msg in messages %}
-    {{msg.timestamp}} {{msg.username}}: {{msg.message}}
-    {% endfor %}
-    </textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send"><br>
-    <input id="chat-leave" type="button" value="Leave Room">
-    {{ room_name|json_script:"room-name" }}
-    <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        const isPvtChat = {{is_private_chat |yesno:"true,false"}}
-=======
     <div class="chat-container">
         <div class="chat-header">
             <h2>{{ room_name }}</h2>
@@ -48,7 +33,7 @@
     <script>
         {% comment %} const roomName = JSON.parse(document.getElementById('room-name').textContent); {% endcomment %}
         const roomName = "{{room_name}}"
->>>>>>> roomview
+        const isPvtChat = {{is_private_chat |yesno:"true,false"}}
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
