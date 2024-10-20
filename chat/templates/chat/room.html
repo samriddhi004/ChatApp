@@ -5,6 +5,7 @@
     <title>Chat Room</title>
 </head>
 <body>
+    <h1>{{room_name}}</h1>
     <textarea id="chat-log" cols="100" rows="20">
     {% for msg in messages %}
     {{msg.timestamp}} {{msg.username}}: {{msg.message}}
@@ -16,7 +17,7 @@
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
+        const isPvtChat = {{is_private_chat |yesno:"true,false"}}
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host

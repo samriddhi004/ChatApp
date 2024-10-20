@@ -36,7 +36,7 @@ CHAT
     <div>
         <h1>Available Chat Rooms</h1>
         <ul>
-            {% for room in rooms%}
+            {% for room in group_chats%}
             <li> 
                 {{room.name}}
                 <a href = {% url "room" room.name %}>JOIN</a>
@@ -49,6 +49,23 @@ CHAT
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
 
+
+    <h3>Start a Private Chat</h3>
+    <p>Enter a username to start a private chat:</p>
+    <input id="private-chat-username-input" type="text" size="50" placeholder="Enter username"><br>
+    <input id="private-chat-submit" type="button" value="Start Private Chat"><br><br>
+
+    <h1>Your Private Chats</h1>
+<ul>
+    {% for chat in pvt_chats %}
+    <li>
+        {{ chat.friend}}
+        <a href="{% url 'pvt_chat' username=chat.friend.username%}">Join</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
     <script>
         document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {
@@ -60,6 +77,23 @@ CHAT
         document.querySelector('#room-name-submit').onclick = function(e) {
             var roomName = document.querySelector('#room-name-input').value;
             window.location.pathname = '/chat/' + roomName + '/';
+        };
+
+
+        //pvt 
+        document.querySelector('#private-chat-username-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#private-chat-submit').click();
+            }
+        };
+
+        // Handle private chat submit button
+        document.querySelector('#private-chat-submit').onclick = function(e) {
+            var username = document.querySelector('#private-chat-username-input').value;
+            if (username) {
+                // window.location.pathname = '/dm/' + username + '/';
+                window.location.pathname = '/chat/' + username + '/';
+            }
         };
     </script>
 </body>
