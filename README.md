@@ -24,10 +24,8 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 - list down available chatrooms with option to join one of them in chat.html
 - leave option added in chatroom
 - "joined the room" and "left the room" message shown
+- room options view added to get details about chatroom
 
-## Following 
-
-- https://channels.readthedocs.io/en/stable/tutorial/part_1.html
 
 ## To Do 📝
 
@@ -40,6 +38,5 @@ usernames: [rohit, sam, bikash, pallavi,..] and password is same as username)
 - You cannot join private room by searching, either you need a invitation link or admin should add you.
 
 ### Rohit
-- Styling message in chatroom (Rohit)
 - 'Add member'/'Remove member' feature in chatroom (Only admin can if it is private group)
 - 

@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{% static "chat/room.css"%}">
+    {% block extracss %}
+    {% endblock %}
+</head>
+<body>
+    <div class="chat-container">
+        {% block chatcontainer %}
+        {% endblock %}
+    </div>
+    <div class="member-info">
+        
+
+    </div>
+    {{ room_name|json_script:"room-name" }}
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        {% comment %} const roomName = "{{room_name}}" {% endcomment %}
+        const isPvtChat = {{is_private_chat |yesno:"true,false"}}
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        const chatLog = document.querySelector('#chat-log');
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const controlsignal = data.controlsignal;
+            const message = data.message;
+            const username = data.username;
+            const timestamp = data.timestamp;
+
+            if(controlsignal != "textmessage") {
+                chatLog.value += (username + ' ' + message + '\n');
+            } else {
+                chatLog.value += (timestamp + ' ' + username + ': ' + message + '\n');
+            }
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+            window.location.pathname = '/chat';
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // Enter key
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-leave').onclick = function(e) {
+            chatSocket.send(JSON.stringify({
+                'controlsignal': true,
+                'message': 'leaveroom'
+            }));
+            chatSocket.close();
+        }
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'controlsignal': false,
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            }
+        };
+    </script>
+</body>
+</html>

@@ -74,9 +74,21 @@ class PrivateChatView(LoginRequiredMixin,View):
         room_name = f"{friend.username}"
         chat,messages = get_chatroom_messages(room_name=room_name,is_group=False,is_private=True,members=[request.user,friend])
         
-        return render(request,"chat/room.html"),{
+        return render(request,"chat/room.html",{
             "room_name" : pvt_chat.name,
             "messages":messages
+            })
+
+class RoomOptionsView(LoginRequiredMixin,View):
+    def get(self,request,room_name):
+        #need to verify that the current logged in user can access this chat
+        
+        chatroom = ChatRoom.objects.get(name=room_name)
+        members = chatroom.members.all()
+        return render(request,"chat/roomoptions.html",{
+            "room_name" : room_name,
+            "chatroom" : chatroom,
+            "members":members
             })
         
            

@@ -1,0 +1,131 @@
+/* Room Options Styles */
+#option-detail {
+    padding: 2rem;
+    position: relative;
+    height: calc(100vh - 150px);
+    background-color: white;
+    border-radius: 0 0 12px 12px;
+}
+
+#option-info {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#option-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+#option-info > ul > li {
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: flex-start;
+    color: #1c1e21;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#option-info > ul > li:last-child {
+    border-bottom: none;
+}
+
+#option-info > ul > li::before {
+    content: "•";
+    color: #0084ff;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Adding labels for each option */
+#option-info > ul > li::after {
+    margin-left: 0.25rem;
+}
+
+/* Styling for the option values */
+#option-info > ul > li > div,
+#option-info > ul > li > span {
+    margin-left: 0.5rem;
+}
+
+#member-list {
+    margin-left: 1rem;
+    /* margin-top: 0.5rem; */
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+#member-list ul {
+    margin: 0;
+    padding: 0.5rem;
+}
+
+#member-list li {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+/* Scrollbar styling for member list */
+#member-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#member-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#member-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#member-list::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* New User Button Styling */
+#newuser {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #0084ff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+#newuser:hover {
+    background-color: #0073e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #option-detail {
+        padding: 1rem;
+    }
+
+    #newuser {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    #member-list {
+        max-height: 150px;
+    }
+    
+    #option-info > ul > li {
+        font-size: 1rem;
+        padding: 0.75rem 0;
+    }
+}

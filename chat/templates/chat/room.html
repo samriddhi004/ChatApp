@@ -1,95 +1,29 @@
+{% extends "chat/roombase.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Room</title>
-    <link rel="stylesheet" href="{% static "chat/room.css"%}">
-</head>
-<body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>{{ room_name }}</h2>
-            <div id="option-container">
+
+{% block extracss %}
+    {% comment %} <link rel="stylesheet" href="{% static "chatview.css" %}"> {% endcomment %}
+{% endblock %}
+
+
+{% block chatcontainer %}
+    <div class="chat-header">
+        <h2>{{ room_name }}</h2>
+        <div id="nav-container">
+            <form action="{% url "roomoptions" room_name %}">
                 <button id="options" class="button">Options</button>
-            </div>
-        </div>
-        <textarea id="chat-log" readonly>{% for msg in messages %}{{msg.timestamp}} {{msg.username}}: {{msg.message}}
-{% endfor %}</textarea>
-        <div class="chat-input-container">
-            <input id="chat-message-input" type="text" placeholder="Type a message...">
-            <div class="buttons-container">
-                <button id="chat-message-submit" class="button">Send</button>
-                <button id="chat-leave" class="button">Leave</button>
-            </div>
+            </form>
+            
         </div>
     </div>
-    <div class="member-info">
-        
 
+    <textarea id="chat-log" readonly>{% for msg in messages %}{{msg.timestamp}} {{msg.username}}: {{msg.message}}
+    {% endfor %}</textarea>
+    <div class="chat-input-container">
+        <input id="chat-message-input" type="text" placeholder="Type a message...">
+        <div class="buttons-container">
+            <button id="chat-message-submit" class="button">Send</button>
+            <button id="chat-leave" class="button">Leave</button>
+        </div>
     </div>
-    {% comment %} {{ room_name|json_script:"room-name" }} {% endcomment %}
-    <script>
-        {% comment %} const roomName = JSON.parse(document.getElementById('room-name').textContent); {% endcomment %}
-        const roomName = "{{room_name}}"
-        const isPvtChat = {{is_private_chat |yesno:"true,false"}}
-        const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/'
-            + roomName
-            + '/'
-        );
-
-        const chatLog = document.querySelector('#chat-log');
-
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            const controlsignal = data.controlsignal;
-            const message = data.message;
-            const username = data.username;
-            const timestamp = data.timestamp;
-
-            if(controlsignal != "textmessage") {
-                chatLog.value += (username + ' ' + message + '\n');
-            } else {
-                chatLog.value += (timestamp + ' ' + username + ': ' + message + '\n');
-            }
-            chatLog.scrollTop = chatLog.scrollHeight;
-        };
-
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-            window.location.pathname = '/chat';
-        };
-
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // Enter key
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        document.querySelector('#chat-leave').onclick = function(e) {
-            chatSocket.send(JSON.stringify({
-                'controlsignal': true,
-                'message': 'leaveroom'
-            }));
-            chatSocket.close();
-        }
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value.trim();
-            if (message) {
-                chatSocket.send(JSON.stringify({
-                    'controlsignal': false,
-                    'message': message
-                }));
-                messageInputDom.value = '';
-            }
-        };
-    </script>
-</body>
-</html>
+{% endblock %}

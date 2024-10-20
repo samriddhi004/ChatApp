@@ -1,0 +1,33 @@
+{% extends "chat/roombase.html" %}
+{% load static %}
+
+{% block extracss %}
+    <link rel="stylesheet" href="{% static "chat/roomoptions.css" %}">
+{% endblock %}
+
+
+{% block chatcontainer %}
+    <div class="chat-header">
+        <h2>{{ room_name }}</h2>
+        <form id = "nav-container" action="{% url "room" room_name %}">
+            <button id="options" class="button">Back to Chat</button>
+        </form> 
+    </div>
+
+    <div id="option-detail">
+        <div id="option-info">
+            <ul>
+                <li>Creator: {{chatroom.creator}}</li>
+                <li>Private Group: {{chatroom.is_private|yesno}}</li>
+                <li>Members: 
+                    <div id="member-list">
+                        <ul>
+                            <li>{% for member in members %}{{member.username}}<br>{% endfor %}</li>
+                        <ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button id = "newuser" class="button">Add New Member</button>
+    </div>
+{% endblock %}
