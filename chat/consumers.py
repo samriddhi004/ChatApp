@@ -37,8 +37,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return room
         else:
             return None
-        
-            
 
     @database_sync_to_async
     def save_message(self,message):

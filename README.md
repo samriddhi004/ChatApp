@@ -7,7 +7,7 @@ A real-time chat application built with django channels and websockets.
 - python manage.py makemigrations
 - python manage.py migrate
 - python manage.py create_superusers 
-- docker run -p 6379:6379 -d redis:5
+- sudo docker run -p 6379:6379 -d redis:5
 - python manage.py runserver
 
 
