@@ -67,7 +67,7 @@ class PrivateChatView(LoginRequiredMixin,View):
             pvt_chat = ChatRoom.objects.create(name=f"{friend.username}-{request.user.username}",is_private=True,is_group=False)  
             pvt_chat.members.add(request.user,friend)
         
-        return render(request,"chat/room.html"),{
+        return render(request,"chat/room.html",{
             "room_name" : pvt_chat.name,
             "messages":messages
             
