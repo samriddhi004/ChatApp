@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Message,ChatRoom
 from django.views import View
+from django.contrib.auth.models import User
 
 from .models import ChatRoom, Message
 
@@ -52,3 +53,24 @@ class OpenChat(LoginRequiredMixin,View):
             "room_name":room_name,
             "messages":messages
         })
+        
+class PrivateChatView(LoginRequiredMixin,View):
+    login_url = "/accounts/login/"
+    
+    def get(self, request, username):
+        
+        friend = get_object_or_404(User,username=username)
+        #if it exists
+        pvt_chat = ChatRoom.objects.filter(is_private=True,is_group=False,members=request.user).filter(members=friend).first() #for querysets
+        #create
+        if not pvt_chat:
+            pvt_chat = ChatRoom.objects.create(name=f"{friend.username}-{request.user.username}",is_private=True,is_group=False)  
+            pvt_chat.members.add(request.user,friend)
+        
+        return render(request,"chat/room.html"),{
+            "room_name" : pvt_chat.name,
+            "messages":messages
+            
+        } )
+        
+           
