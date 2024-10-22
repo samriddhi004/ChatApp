@@ -19,9 +19,10 @@ class ChatView(LoginRequiredMixin, TemplateView):
         for room in pvt_chats:
             friend = room.members.exclude(username=user.username).first()
             if friend:
-                pvt_chat_list.append({"room_name":room.name,"friend":friend.username})
+                room_name = f"{min(friend.username, user.username)}-{max(user.username, friend.username)}"
+                pvt_chat_list.append({"room_name":room_name,"friend":friend.username})
         context["group_chats"] = group_chats
-        context["pvt_chats"] = pvt_chats
+        context["pvt_chats"] = pvt_chat_list
         return context
     
 #to save it to db
@@ -67,17 +68,42 @@ class OpenChat(LoginRequiredMixin,View):
 class PrivateChatView(LoginRequiredMixin,View):
     login_url = "/accounts/login/"
     
-    def get(self, request, username):
+    # def get(self, request, username):
         
-        friend = get_object_or_404(User,username=username)
-        #if it exists
-        room_name = f"{friend.username}"
-        chat,messages = get_chatroom_messages(room_name=room_name,is_group=False,is_private=True,members=[request.user,friend])
+    #     friend = get_object_or_404(User,username=username)
+    #     #if it exists
+    #     #consistent alphabetical naming of pvt room
+    #     room_name = f"{min(friend.username, request.user.username)}-{max(request.user.username,friend.username)}"
+    #     chat,messages = get_chatroom_messages(room_name=room_name,is_group=False,is_private=True,members=[request.user,friend])
         
-        return render(request,"chat/room.html",{
-            "room_name" : pvt_chat.name,
-            "messages":messages
-            })
+    #     return render(request,"chat/room.html",{
+    #         "room_name" : room_name,
+    #         "messages":messages
+    #         })
+    def get(self, request, room_name):  
+        # Split room_name to get usernames
+        usernames = room_name.split('-')
+        
+        # Ensure we have exactly two usernames
+        if len(usernames) != 2:
+            return ("Invalid room name.")
+
+        # Get the friend username (the other user in the private chat)
+        friend_username = usernames[0] if usernames[0] != request.user.username else usernames[1]
+        friend = get_object_or_404(User, username=friend_username)
+
+        chat, messages = get_chatroom_messages(
+            room_name=room_name,
+            is_group=False,
+            is_private=True,
+            members=[request.user, friend]
+        )
+        
+        return render(request, "chat/room.html", {
+            "room_name": room_name,
+            "messages": messages
+        })
+ 
 
 class RoomOptionsView(LoginRequiredMixin,View):
     def get(self,request,room_name):

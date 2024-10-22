@@ -59,8 +59,9 @@ CHAT
 <ul>
     {% for chat in pvt_chats %}
     <li>
-        {{ chat.friend}}
-        <a href="{% url 'pvt_chat' username=chat.friend.username%}">Join</a>
+        {{ chat.friend }}
+        <p>Room Name: {{ chat.room_name }}</p> 
+        <a href="{% url 'pvt_chat' room_name=chat.room_name %}">Join</a>
     </li>
     {% endfor %}
 </ul>
@@ -88,13 +89,24 @@ CHAT
         };
 
         // Handle private chat submit button
-        document.querySelector('#private-chat-submit').onclick = function(e) {
+        {% comment %} document.querySelector('#private-chat-submit').onclick = function(e) {
             var username = document.querySelector('#private-chat-username-input').value;
             if (username) {
                 // window.location.pathname = '/dm/' + username + '/';
                 window.location.pathname = '/chat/' + username + '/';
             }
-        };
+        }; {% endcomment %}
+        document.querySelector("#private-chat-submit").onclick = function(){
+            const friendUserName = document.querySelector('#private-chat-username-input').value;
+            if (friendUserName.trim()!==""){
+                const currUserName="{{request.user.username}}";
+                const room_name = [currUserName,friendUserName].sort().join("-");
+                {% comment %} window.location.href = `/chat/dm/${room_name}/`; {% endcomment %}
+                window.location.pathname = '/chat/dm/' + room_name + '/';
+            }else{
+                alert("Please enter a username to enter private chat.");
+            }
+        }
     </script>
 </body>
 </html>
