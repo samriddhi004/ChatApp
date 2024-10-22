@@ -59,9 +59,9 @@ CHAT
 <ul>
     {% for chat in pvt_chats %}
     <li>
-        {{ chat.friend }}
+        {% comment %} {{ chat.friend }} {% endcomment %}
         <p>Room Name: {{ chat.room_name }}</p> 
-        <a href="{% url 'pvt_chat' room_name=chat.room_name %}">Join</a>
+        <a href="{% url 'pvt_chat' room_name=chat.room_name %}">{{chat.friend}}</a>
     </li>
     {% endfor %}
 </ul>
